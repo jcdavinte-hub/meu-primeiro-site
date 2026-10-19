@@ -1,0 +1,1456 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vermelho Popular | Vista suas ideias. Vista o Brasil.</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#D32F2F',
+                            darkred: '#9A0007',
+                            lightred: '#FF6659',
+                            dark: '#111111',
+                            gray: '#1E1E1E',
+                            lightgray: '#F5F5F5'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAFA;
+            color: #111111;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D32F2F;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9A0007;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-brand-red text-white text-xs sm:text-sm font-bold py-2.5 px-4 text-center tracking-wide uppercase shadow-md flex items-center justify-center gap-2">
+        <i class="fa-solid fa-truck-fast animate-bounce"></i>
+        <span>MAIS DE 11.000 CAMISETAS ENTREGUES EM TODO O BRASIL • FRETE RÁPIDO</span>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="bg-brand-red text-white w-10 h-10 rounded-lg flex items-center justify-center font-black text-xl shadow-md transform -rotate-3 hover:rotate-0 transition-transform">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-gray-900 block leading-none">VERMELHO <span class="text-brand-red">POPULAR</span></span>
+                        <span class="text-[10px] tracking-widest uppercase font-semibold text-gray-500 block">Vista Suas Ideias</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex space-x-8 font-semibold text-sm">
+                    <button onclick="navigateTo('home')" class="nav-link text-gray-800 hover:text-brand-red transition-colors py-2">Início</button>
+                    <button onclick="scrollToSection('catalog')" class="nav-link text-gray-800 hover:text-brand-red transition-colors py-2">Camisetas</button>
+                    <button onclick="scrollToSection('reviews')" class="nav-link text-gray-800 hover:text-brand-red transition-colors py-2 flex items-center gap-1.5">
+                        <span>Avaliações</span>
+                        <span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">4.8 ★</span>
+                    </button>
+                    <button onclick="openModal('historyModal')" class="nav-link text-gray-800 hover:text-brand-red transition-colors py-2">Nossa História</button>
+                    <button onclick="openModal('contactModal')" class="nav-link text-gray-800 hover:text-brand-red transition-colors py-2">Atendimento</button>
+                </nav>
+
+                <!-- Actions: Cart & Admin -->
+                <div class="flex items-center gap-3">
+                    <!-- Admin Button -->
+                    <button onclick="toggleAdminPanel()" class="px-3 py-1.5 text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md border border-gray-300 transition-colors flex items-center gap-1.5" title="Painel Administrativo">
+                        <i class="fa-solid fa-gear text-brand-red"></i>
+                        <span class="hidden sm:inline">Painel Admin</span>
+                    </button>
+
+                    <!-- Cart Trigger -->
+                    <button onclick="toggleCart()" class="relative bg-brand-red hover:bg-brand-darkred text-white p-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-bold">
+                        <i class="fa-solid fa-bag-shopping text-lg"></i>
+                        <span class="hidden sm:inline text-sm">Carrinho</span>
+                        <span id="cartCountBadge" class="bg-white text-brand-red text-xs font-extrabold w-5 h-5 rounded-full flex items-center justify-center ml-1">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-700 hover:text-brand-red text-2xl focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-4 space-y-3">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left py-2 font-semibold text-gray-800 hover:text-brand-red border-b border-gray-100">Início</button>
+            <button onclick="scrollToSection('catalog'); toggleMobileMenu()" class="block w-full text-left py-2 font-semibold text-gray-800 hover:text-brand-red border-b border-gray-100">Camisetas</button>
+            <button onclick="scrollToSection('reviews'); toggleMobileMenu()" class="block w-full text-left py-2 font-semibold text-gray-800 hover:text-brand-red border-b border-gray-100">Avaliações (4.8 ★)</button>
+            <button onclick="openModal('historyModal'); toggleMobileMenu()" class="block w-full text-left py-2 font-semibold text-gray-800 hover:text-brand-red border-b border-gray-100">Nossa História</button>
+            <button onclick="openModal('contactModal'); toggleMobileMenu()" class="block w-full text-left py-2 font-semibold text-gray-800 hover:text-brand-red">Atendimento</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        
+        <!-- Hero Section -->
+        <section class="relative bg-brand-gray text-white overflow-hidden py-12 md:py-20">
+            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#D32F2F_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    
+                    <!-- Hero Text -->
+                    <div class="text-left space-y-6">
+                        <div class="inline-flex items-center gap-2 bg-brand-red/20 border border-brand-red/50 text-red-300 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-fire text-brand-red"></i> Coleção Democracia & Resistência
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                            Vista suas ideias.<br>
+                            <span class="text-brand-red">Mostre sua atitude.</span>
+                        </h1>
+                        <p class="text-gray-300 text-lg md:text-xl font-normal max-w-xl leading-relaxed">
+                            Camisetas para quem tem opinião, identidade e vontade de se expressar. Produzidas em algodão de alta qualidade com estampas marcantes da política e dos movimentos populares.
+                        </p>
+
+                        <!-- Proof Badge: 11,000+ Sales & Rating -->
+                        <div class="pt-2 flex flex-wrap items-center gap-4 bg-gray-900/80 p-4 rounded-2xl border border-gray-800 backdrop-blur-sm max-w-lg">
+                            <div class="flex items-center gap-3 border-r border-gray-700 pr-4">
+                                <div class="bg-amber-500/20 text-amber-400 p-2.5 rounded-xl text-xl font-black">
+                                    4.8
+                                </div>
+                                <div>
+                                    <div class="text-amber-400 text-xs flex gap-1">
+                                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                                    </div>
+                                    <span class="text-[11px] text-gray-400 font-semibold">Média de Avaliações</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-box-open text-brand-red text-2xl"></i>
+                                <div>
+                                    <span class="text-lg font-black text-white block leading-none">+11.000</span>
+                                    <span class="text-[11px] text-gray-400 font-semibold">Vendas Entregues no Brasil</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex flex-col sm:flex-row gap-4">
+                            <button onclick="scrollToSection('catalog')" class="bg-brand-red hover:bg-brand-darkred text-white text-lg font-extrabold px-8 py-4 rounded-xl shadow-lg hover:shadow-red-900/40 transition-all flex items-center justify-center gap-3 group">
+                                <span>VER CAMISETAS</span>
+                                <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                            <button onclick="scrollToSection('reviews')" class="bg-transparent hover:bg-white/10 text-white border-2 border-gray-600 hover:border-white text-lg font-bold px-6 py-4 rounded-xl transition-all text-center flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-comments text-amber-400"></i>
+                                <span>Ver Avaliações</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hero Visual Banner -->
+                    <div class="relative flex justify-center">
+                        <div class="relative w-full max-w-md bg-gradient-to-br from-brand-red to-red-950 p-1 rounded-3xl shadow-2xl overflow-hidden group">
+                            <!-- Visual Graphic Showcase -->
+                            <div class="bg-gray-900 p-8 rounded-[22px] flex flex-col items-center text-center relative overflow-hidden">
+                                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-brand-red/20 rounded-full blur-2xl"></div>
+                                <svg class="w-48 h-48 my-4 text-brand-red drop-shadow-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                                    <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" fill="#D32F2F" stroke="#FFFFFF" stroke-width="0.5"/>
+                                    <polygon points="12 8 13.1 10.2 15.5 10.6 13.8 12.3 14.2 14.7 12 13.5 9.8 14.7 10.2 12.3 8.5 10.6 10.9 10.2 12 8" fill="#FFFFFF"/>
+                                </svg>
+                                <div class="space-y-2 mt-2">
+                                    <span class="bg-white text-brand-dark px-3 py-1 rounded-full text-xs font-black uppercase">Edição Especial</span>
+                                    <h3 class="text-xl font-bold text-white">Camiseta Vermelha da Estrela</h3>
+                                    <p class="text-xs text-gray-400">100% Algodão Penteado • Acabamento Premium</p>
+                                    <div class="text-2xl font-black text-brand-lightred mt-2">
+                                        R$ <span id="heroPriceDisplay">5,00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Value Proposition / Benefits Section -->
+        <section class="py-10 bg-white border-y border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="w-12 h-12 rounded-full bg-red-100 text-brand-red flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-tag"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900">Preço Promocional</h4>
+                            <p class="text-xs text-gray-500">Valores especiais de fábrica</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="w-12 h-12 rounded-full bg-red-100 text-brand-red flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-truck-ramp-box"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900">Frete Nacional</h4>
+                            <p class="text-xs text-gray-500">+11.000 entregas concluídas</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="w-12 h-12 rounded-full bg-red-100 text-brand-red flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900">Garantia & CDC</h4>
+                            <p class="text-xs text-gray-500">7 dias para devolução simples</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="w-12 h-12 rounded-full bg-red-100 text-brand-red flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900">Pagamento Seguro</h4>
+                            <p class="text-xs text-gray-500">PIX instantâneo e Cartão</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Catalog Section -->
+        <section id="catalog" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-brand-red font-extrabold uppercase text-xs tracking-widest block mb-2">Coleção Oficial</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">Escolha suas Camisetas</h2>
+                <p class="text-gray-600 mt-2 text-sm sm:text-base">Selecione os tamanhos e adicione ao seu carrinho. Qualidade garantida em tecido 100% algodão.</p>
+            </div>
+
+            <!-- Product Grid Container -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Products dynamically rendered by JS -->
+            </div>
+        </section>
+
+        <!-- REVIEWS AND TESTIMONIALS SECTION -->
+        <section id="reviews" class="py-16 bg-gray-100 border-t border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2">
+                            <i class="fa-solid fa-star text-amber-500"></i> Satisfação Comprovada
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">O que nossos clientes dizem</h2>
+                        <p class="text-gray-600 mt-1 text-sm">Depoimentos reais de quem vestiu a camisa em todo o Brasil.</p>
+                    </div>
+
+                    <!-- Overall Score Box -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 flex items-center gap-6 w-full md:w-auto">
+                        <div class="text-center border-r border-gray-100 pr-6">
+                            <span class="text-4xl font-black text-gray-900 leading-none">4.8</span>
+                            <span class="text-xs text-gray-400 block font-semibold mt-1">de 5.0 estrelas</span>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="text-amber-400 text-sm flex gap-1">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <p class="text-xs text-gray-600 font-bold">+11.000 clientes atendidos</p>
+                            <p class="text-[11px] text-green-600 font-semibold"><i class="fa-solid fa-circle-check"></i> 98.4% de avaliações 5 estrelas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Filter & Actions -->
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-8 bg-white p-4 rounded-xl border border-gray-200">
+                    <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                        <span class="text-gray-500 mr-2">Filtrar por:</span>
+                        <button onclick="filterReviews('ALL')" class="review-filter-btn px-3 py-1.5 rounded-lg bg-brand-red text-white">Todas</button>
+                        <button onclick="filterReviews(5)" class="review-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">5 Estrelas (★ 5)</button>
+                        <button onclick="filterReviews(4)" class="review-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200">4 Estrelas (★ 4)</button>
+                    </div>
+                    <button onclick="openModal('addReviewModal')" class="bg-gray-900 hover:bg-black text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-pen"></i> Escrever Avaliação
+                    </button>
+                </div>
+
+                <!-- Reviews Grid -->
+                <div id="reviewsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic review items rendered by JS -->
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Informational Banner / Manifesto -->
+        <section class="bg-red-950 text-white py-16 px-4 relative overflow-hidden my-12">
+            <div class="max-w-4xl mx-auto text-center space-y-6 relative z-10">
+                <div class="inline-block bg-brand-red px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">Compromisso Popular</div>
+                <h2 class="text-3xl sm:text-4xl font-black leading-tight">Produção Responsável e Identidade Nacional</h2>
+                <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
+                    Nossas camisetas são tecidas por mãos brasileiras, unindo a força do trabalho local ao orgulho de defender causas populares, direitos trabalhistas e a soberania do nosso povo.
+                </p>
+                <div class="pt-4 flex justify-center gap-4">
+                    <button onclick="openModal('historyModal')" class="bg-white text-brand-dark font-bold px-6 py-3 rounded-xl hover:bg-gray-100 transition-colors shadow">
+                        Ler Manifesto Completo
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-gray text-gray-300 border-t border-gray-800 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-gray-800">
+                
+                <!-- Col 1: About -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-brand-red text-white w-8 h-8 rounded flex items-center justify-center font-black text-base">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="text-xl font-black tracking-tight text-white">VERMELHO <span class="text-brand-red">POPULAR</span></span>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        A loja virtual feita para quem tem orgulho de expressar suas posições políticas e defender os movimentos sociais do Brasil.
+                    </p>
+                    <p class="text-xs text-amber-400 font-bold"><i class="fa-solid fa-star"></i> Nota 4.8 / 5.0 com mais de 11.000 entregas no Brasil</p>
+                </div>
+
+                <!-- Col 2: Navigation -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider">Navegação</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#catalog" class="hover:text-white transition-colors">Catálogo de Camisetas</a></li>
+                        <li><a href="#reviews" class="hover:text-white transition-colors">Avaliações dos Clientes</a></li>
+                        <li><button onclick="openModal('historyModal')" class="hover:text-white transition-colors">Nossa História</button></li>
+                        <li><button onclick="toggleAdminPanel()" class="hover:text-white transition-colors text-brand-lightred font-semibold">Painel Administrativo</button></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Transparência e Políticas -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider">Transparência & Legislação</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><button onclick="openModal('privacyModal')" class="hover:text-white transition-colors">Política de Privacidade (LGPD)</button></li>
+                        <li><button onclick="openModal('termsModal')" class="hover:text-white transition-colors">Termos de Uso</button></li>
+                        <li><button onclick="openModal('returnsModal')" class="hover:text-white transition-colors">Trocas, Devoluções & Reembolso (CDC)</button></li>
+                        <li><button onclick="openModal('shippingModal')" class="hover:text-white transition-colors">Prazos e Entregas</button></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contato & Atendimento -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-sm uppercase tracking-wider">Atendimento ao Cliente</h4>
+                    <p class="text-xs text-gray-400">Dúvidas sobre o seu pedido? Entre em contato conosco:</p>
+                    <button onclick="openModal('contactModal')" class="w-full bg-brand-red hover:bg-brand-darkred text-white font-bold py-2 px-4 rounded-lg text-xs transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-headset"></i> Falar com Suporte
+                    </button>
+                    <div id="companyContactFooter" class="text-[11px] text-gray-500 pt-2 space-y-1">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Disclaimer & Copyright -->
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-4">
+                <p>&copy; Vermelho Popular. Todos os direitos reservados. Respeitamos o Código de Defesa do Consumidor.</p>
+                <div class="flex items-center space-x-4 text-lg">
+                    <i class="fa-brands fa-pix text-green-500" title="Aceitamos PIX"></i>
+                    <i class="fa-brands fa-cc-mastercard text-gray-300" title="Mastercard"></i>
+                    <i class="fa-brands fa-cc-visa text-gray-300" title="Visa"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SLIDE-OUT CART PANEL -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                
+                <!-- Cart Header -->
+                <div class="p-5 bg-gray-900 text-white flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-bag-shopping text-brand-red text-xl"></i>
+                        <h3 class="text-lg font-black tracking-tight">Seu Carrinho</h3>
+                    </div>
+                    <button onclick="toggleCart()" class="text-gray-400 hover:text-white text-xl p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items Container -->
+                <div id="cartItemsList" class="flex-1 overflow-y-auto p-5 space-y-4">
+                    <!-- Dynamic cart items list -->
+                </div>
+
+                <!-- Cart Footer / Summary -->
+                <div class="p-5 bg-gray-50 border-t border-gray-200 space-y-4">
+                    
+                    <!-- CEP Shipping Simulator -->
+                    <div class="bg-white p-3 rounded-lg border border-gray-200 space-y-2">
+                        <label class="block text-xs font-bold text-gray-700">Simular Frete (CEP):</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="cepInput" placeholder="00000-000" maxlength="9" class="flex-1 text-xs p-2 border border-gray-300 rounded focus:ring-1 focus:ring-brand-red outline-none">
+                            <button onclick="calculateShipping()" class="bg-gray-800 hover:bg-black text-white text-xs font-bold px-3 rounded transition-colors">Calcular</button>
+                        </div>
+                        <p id="shippingResult" class="text-xs text-green-600 font-semibold hidden"></p>
+                    </div>
+
+                    <!-- Totals Breakdown -->
+                    <div class="space-y-1.5 text-xs text-gray-600">
+                        <div class="flex justify-between">
+                            <span>Subtotal Produtos:</span>
+                            <span id="cartSubtotalDisplay" class="font-bold text-gray-900">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Frete:</span>
+                            <span id="cartShippingDisplay" class="font-bold text-green-600">Grátis</span>
+                        </div>
+                        <div class="flex justify-between text-base font-black text-gray-900 pt-2 border-t border-gray-200">
+                            <span>Total Geral:</span>
+                            <span id="cartTotalDisplay" class="text-brand-red">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Checkout CTA Button -->
+                    <button id="checkoutButton" onclick="openCheckoutModal()" class="w-full bg-brand-red hover:bg-brand-darkred text-white py-3.5 rounded-xl font-extrabold text-sm shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span>IR PARA O CHECKOUT</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD REVIEW MODAL -->
+    <div id="addReviewModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl animate-fade-in space-y-4">
+            <button onclick="closeModal('addReviewModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-xl font-black text-gray-900">Enviar sua Avaliação</h3>
+            <p class="text-xs text-gray-600">Compartilhe sua experiência sobre a qualidade das camisetas e a entrega.</p>
+            
+            <form onsubmit="submitReview(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">Seu Nome / Apelido *</label>
+                    <input type="text" id="revName" required placeholder="Ex: Maria Silva" class="w-full p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">Sua Cidade / Estado *</label>
+                    <input type="text" id="revCity" required placeholder="Ex: São Paulo - SP" class="w-full p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">Sua Nota (1 a 5 estrelas) *</label>
+                    <select id="revRating" class="w-full p-2.5 border border-gray-300 rounded-lg font-bold">
+                        <option value="5">★★★★★ (5 Estrelas - Excelente)</option>
+                        <option value="4">★★★★☆ (4 Estrelas - Muito Bom)</option>
+                        <option value="3">★★★☆☆ (3 Estrelas - Bom)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">Seu Comentário *</label>
+                    <textarea id="revComment" rows="3" required placeholder="Fale sobre o tecido, caimento e entrega..." class="w-full p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-red hover:bg-brand-darkred text-white font-bold py-3 rounded-xl transition-colors">
+                    Publicar Avaliação
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="productDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('productDetailModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="productModalContent">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 relative shadow-2xl animate-fade-in my-8 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('checkoutModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="border-b border-gray-200 pb-4 mb-6">
+                <h3 class="text-2xl font-black text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-cat text-brand-red"></i> Finalizar Pedido
+                </h3>
+                <p class="text-xs text-gray-500">Insira seus dados de entrega para prosseguir ao pagamento seguro.</p>
+            </div>
+
+            <form id="checkoutForm" onsubmit="submitOrder(event)" class="space-y-6">
+                
+                <!-- Personal Info -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wide">1. Dados Pessoais</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Nome Completo *</label>
+                            <input type="text" id="custName" required class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">E-mail *</label>
+                            <input type="email" id="custEmail" required class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">CPF *</label>
+                            <input type="text" id="custCPF" placeholder="000.000.000-00" required class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Telefone / WhatsApp *</label>
+                            <input type="tel" id="custPhone" placeholder="(00) 00000-0000" required class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="space-y-3 pt-2 border-t border-gray-100">
+                    <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wide">2. Endereço de Entrega</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="sm:col-span-1">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">CEP *</label>
+                            <input type="text" id="custCEP" required placeholder="00000-000" class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Rua / Logradouro *</label>
+                            <input type="text" id="custStreet" required class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Número *</label>
+                            <input type="text" id="custNumber" required class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Bairro *</label>
+                            <input type="text" id="custNeighborhood" required class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Cidade / UF *</label>
+                            <input type="text" id="custCity" required placeholder="Ex: São Paulo / SP" class="w-full text-xs p-2.5 border border-gray-300 rounded-lg outline-none focus:ring-1 focus:ring-brand-red">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="space-y-3 pt-2 border-t border-gray-100">
+                    <h4 class="text-sm font-bold text-gray-800 uppercase tracking-wide">3. Forma de Pagamento</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="border border-gray-300 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-red">
+                            <input type="radio" name="paymentMethod" value="PIX" checked class="text-brand-red focus:ring-brand-red">
+                            <div>
+                                <span class="block text-xs font-bold text-gray-900">PIX Instantâneo</span>
+                                <span class="block text-[10px] text-gray-500">Aprovação imediata</span>
+                            </div>
+                        </label>
+                        <label class="border border-gray-300 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-brand-red">
+                            <input type="radio" name="paymentMethod" value="CREDIT_CARD" class="text-brand-red focus:ring-brand-red">
+                            <div>
+                                <span class="block text-xs font-bold text-gray-900">Cartão de Crédito</span>
+                                <span class="block text-[10px] text-gray-500">Via Mercado Pago / Stripe</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Order Summary Box -->
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="flex justify-between text-sm font-bold text-gray-900">
+                        <span>Total a Pagar:</span>
+                        <span id="checkoutTotalDisplay" class="text-brand-red text-base">R$ 0,00</span>
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-1">Ao confirmar, o pedido é registrado como "Aguardando Pagamento". Conforme normas de segurança, o pedido só é despachado após confirmação real pelo gateway.</p>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-red hover:bg-brand-darkred text-white py-4 rounded-xl font-extrabold text-base shadow-lg transition-all">
+                    CONFIRMAR PEDIDO
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER CONFIRMATION MODAL -->
+    <div id="orderSuccessModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl animate-fade-in">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="text-2xl font-black text-gray-900">Pedido Gerado com Sucesso!</h3>
+            <p class="text-xs text-gray-600">
+                Seu número de pedido é: <strong id="orderIdDisplay" class="text-brand-red font-mono">#00000</strong>
+            </p>
+            <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg text-left text-xs text-yellow-800 space-y-1">
+                <p class="font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Status: Aguardando Pagamento</p>
+                <p>Nenhum pagamento real foi processado no modo demonstrativo local. Em produção, você será redirecionado para o Checkout do Mercado Pago/Stripe.</p>
+            </div>
+            <button onclick="closeModal('orderSuccessModal')" class="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-black transition-colors">
+                Voltar à Loja
+            </button>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL DRAWER / MODAL -->
+    <div id="adminPanelModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-5xl w-full p-6 sm:p-8 relative shadow-2xl animate-fade-in my-6 max-h-[92vh] overflow-y-auto">
+            
+            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6">
+                <div>
+                    <span class="bg-brand-red text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">Área Restrita</span>
+                    <h3 class="text-2xl font-black text-gray-900">Painel Administrativo da Loja</h3>
+                </div>
+                <button onclick="toggleAdminPanel()" class="text-gray-400 hover:text-gray-800 text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Admin Navigation Tabs -->
+            <div class="flex border-b border-gray-200 space-x-6 mb-6">
+                <button onclick="switchAdminTab('productsTab')" class="admin-tab-btn font-bold text-sm pb-2 border-b-2 border-brand-red text-brand-red">Gerenciar Produtos</button>
+                <button onclick="switchAdminTab('ordersTab')" class="admin-tab-btn font-bold text-sm pb-2 text-gray-500 hover:text-gray-800">Pedidos Recebidos</button>
+                <button onclick="switchAdminTab('settingsTab')" class="admin-tab-btn font-bold text-sm pb-2 text-gray-500 hover:text-gray-800">Configurações & APIs</button>
+            </div>
+
+            <!-- TAB 1: GERENCIAR PRODUTOS -->
+            <div id="productsTab" class="admin-tab-content space-y-6">
+                <div class="flex justify-between items-center">
+                    <h4 class="font-bold text-gray-800 text-sm uppercase">Editar Catálogo & Preços</h4>
+                    <button onclick="addNewProductPrompt()" class="bg-brand-red text-white text-xs font-bold px-3 py-2 rounded-lg hover:bg-brand-darkred transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> Novo Produto
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 border-b border-gray-200 text-gray-700 uppercase">
+                                <th class="p-3">ID / Foto</th>
+                                <th class="p-3">Nome do Produto</th>
+                                <th class="p-3">Preço (R$)</th>
+                                <th class="p-3">Estoque P / M / G / GG</th>
+                                <th class="p-3 text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTable" class="divide-y divide-gray-200">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: PEDIDOS -->
+            <div id="ordersTab" class="admin-tab-content space-y-4 hidden">
+                <h4 class="font-bold text-gray-800 text-sm uppercase">Histórico de Pedidos</h4>
+                <div id="adminOrdersList" class="space-y-3">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+
+            <!-- TAB 3: CONFIGURAÇÕES & INTEGRATION GUIDE -->
+            <div id="settingsTab" class="admin-tab-content space-y-6 hidden">
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4">
+                    <h4 class="font-bold text-gray-900 text-sm uppercase">Credenciais de Pagamento & Analytics</h4>
+                    <p class="text-xs text-gray-600">Insira suas chaves de API reais para habilitar os módulos de pagamento e métricas em produção.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">Mercado Pago Access Token</label>
+                            <input type="text" id="cfgMercadoPago" placeholder="APP_USR-xxxxxxxxx" class="w-full p-2 border border-gray-300 rounded font-mono">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">Stripe Public Key</label>
+                            <input type="text" id="cfgStripe" placeholder="pk_live_xxxxxxxxx" class="w-full p-2 border border-gray-300 rounded font-mono">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">Google Analytics ID</label>
+                            <input type="text" id="cfgGA" placeholder="G-XXXXXXXXXX" class="w-full p-2 border border-gray-300 rounded font-mono">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">Meta Pixel ID</label>
+                            <input type="text" id="cfgMetaPixel" placeholder="1234567890" class="w-full p-2 border border-gray-300 rounded font-mono">
+                        </div>
+                    </div>
+                    <button onclick="saveAdminSettings()" class="bg-gray-900 text-white font-bold px-4 py-2 rounded text-xs hover:bg-black">Salvar Configurações</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- INSTITUTIONAL MODALS -->
+    <div id="historyModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[85vh] overflow-y-auto space-y-4">
+            <button onclick="closeModal('historyModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-black text-brand-red">Nossa História & Manifesto</h3>
+            <div class="text-xs text-gray-700 space-y-3 leading-relaxed">
+                <p>O <strong>Vermelho Popular</strong> nasceu do desejo de unir a paixão pela política brasileira, os movimentos sociais e o orgulho popular em peças de vestuário acessíveis e de altíssima qualidade.</p>
+                <p>Acreditamos que a vestimenta é uma das formas mais diretas e autênticas de expressão da identidade política. Nossas estampas celebram a história da democracia, o Partido dos Trabalhadores, as lutas operárias e a soberania do Brasil.</p>
+                <p>Com mais de 11.000 entregas realizadas por todo o país, mantemos o compromisso de oferecer malhas duráveis, confortáveis e com entrega rápida para todos os estados.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="privacyModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[85vh] overflow-y-auto space-y-4">
+            <button onclick="closeModal('privacyModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-black text-gray-900">Política de Privacidade (LGPD)</h3>
+            <div class="text-xs text-gray-700 space-y-3 leading-relaxed">
+                <p>A loja <strong>Vermelho Popular</strong> cumpre rigorosamente a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).</p>
+                <p>Coletamos apenas as informações necessárias para faturamento e entrega de mercadorias. Os dados de pagamento são tratados de forma criptografada via gateways oficiais.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[85vh] overflow-y-auto space-y-4">
+            <button onclick="closeModal('termsModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-black text-gray-900">Termos de Uso</h3>
+            <div class="text-xs text-gray-700 space-y-3 leading-relaxed">
+                <p>Ao adquirir produtos na Vermelho Popular, garante-se o direito de troca e devolução dentro das regras do Código de Defesa do Consumidor.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="returnsModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[85vh] overflow-y-auto space-y-4">
+            <button onclick="closeModal('returnsModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-black text-brand-red">Política de Trocas, Devoluções & Reembolso</h3>
+            <div class="text-xs text-gray-700 space-y-3 leading-relaxed">
+                <p>Respeitamos o <strong>Código de Defesa do Consumidor (CDC)</strong>:</p>
+                <p><strong>• Direito de Arrependimento (7 Dias):</strong> Até 7 dias após o recebimento para reembolso total.</p>
+                <p><strong>• Garantia por Defeito:</strong> Até 90 dias de cobertura contra qualquer defeito na costura ou estampa.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="shippingModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 relative shadow-2xl max-h-[85vh] overflow-y-auto space-y-4">
+            <button onclick="closeModal('shippingModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-black text-gray-900">Prazos e Condições de Entrega</h3>
+            <div class="text-xs text-gray-700 space-y-3 leading-relaxed">
+                <p>Despachamos em até 24 horas úteis. Já realizamos mais de 11.000 entregas em todas as regiões brasileiras.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl space-y-4">
+            <button onclick="closeModal('contactModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-black text-gray-900">Fale com o Atendimento</h3>
+            <p class="text-xs text-gray-600">Envie sua dúvida para nosso suporte:</p>
+            <form onsubmit="handleContactSubmit(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">Seu Nome</label>
+                    <input type="text" required class="w-full p-2 border border-gray-300 rounded">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">Seu E-mail</label>
+                    <input type="email" required class="w-full p-2 border border-gray-300 rounded">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">Mensagem</label>
+                    <textarea rows="3" required class="w-full p-2 border border-gray-300 rounded"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-brand-red text-white font-bold py-2.5 rounded-lg hover:bg-brand-darkred">Enviar Mensagem</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- APPLICATION LOGIC (JAVASCRIPT) -->
+    <script>
+        // Initial Database
+        let products = [
+            {
+                id: 1,
+                name: "Camiseta Vermelha Estrela PT",
+                price: 5.00,
+                color: "Vermelho",
+                sizes: { P: 15, M: 20, G: 12, GG: 8 },
+                imageSvg: `<svg class="w-full h-48 py-4 text-brand-red" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" fill="#D32F2F" stroke="#9A0007" stroke-width="0.5"/><polygon points="12 8 13.1 10.2 15.5 10.6 13.8 12.3 14.2 14.7 12 13.5 9.8 14.7 10.2 12.3 8.5 10.6 10.9 10.2 12 8" fill="#FFFFFF"/></svg>`,
+                desc: "Camiseta clássica com o símbolo da estrela. Confeccionada em malha 100% algodão fio 30.1 penteado, garantindo leveza e maciez ao vestir.",
+                washing: "Lavar à mão ou máquina no ciclo delicado. Não usar alvejante com cloro. Passar pelo avesso."
+            },
+            {
+                id: 2,
+                name: "Camiseta Direitos & Democracia",
+                price: 5.00,
+                color: "Vermelho",
+                sizes: { P: 10, M: 14, G: 18, GG: 5 },
+                imageSvg: `<svg class="w-full h-48 py-4 text-brand-red" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" fill="#B71C1C" stroke="#9A0007" stroke-width="0.5"/><text x="12" y="13" font-size="2.5" font-weight="900" fill="#FFFFFF" text-anchor="middle">DEMOCRACIA</text></svg>`,
+                desc: "Estampa de alta definição celebrando os direitos sociais e o fortalecimento democrático do país.",
+                washing: "Secar à sombra. Não secar em tambor."
+            },
+            {
+                id: 3,
+                name: "Camiseta Frase: Resistência & Esperança",
+                price: 5.00,
+                color: "Preto com estampa Vermelha",
+                sizes: { P: 8, M: 25, G: 20, GG: 10 },
+                imageSvg: `<svg class="w-full h-48 py-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" fill="#111111" stroke="#333333" stroke-width="0.5"/><text x="12" y="11.5" font-size="2" font-weight="900" fill="#D32F2F" text-anchor="middle">RESISTÊNCIA</text><text x="12" y="14" font-size="1.8" font-weight="700" fill="#FFFFFF" text-anchor="middle">& ESPERANÇA</text></svg>`,
+                desc: "Camiseta em tom escuro com estampa frontal em silk-screen durável com frase popular.",
+                washing: "Passar a ferro até 110°C sem vapor sobre a estampa."
+            },
+            {
+                id: 4,
+                name: "Camiseta Básica Vermelho Popular",
+                price: 5.00,
+                color: "Vermelho Liso",
+                sizes: { P: 30, M: 40, G: 35, GG: 20 },
+                imageSvg: `<svg class="w-full h-48 py-4 text-brand-red" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" fill="#E53935" stroke="#9A0007" stroke-width="0.5"/></svg>`,
+                desc: "Camiseta vermelha lisa básica. Modelagem confortável, costuras reforçadas de ombro a ombro.",
+                washing: "Lavagem normal até 40°C."
+            }
+        ];
+
+        // Detailed Customer Reviews (Rating 4.8 / 5.0)
+        let reviews = [
+            {
+                id: 101,
+                name: "Carlos Eduardo N.",
+                location: "São Paulo - SP",
+                rating: 5,
+                date: "há 2 dias",
+                productName: "Camiseta Vermelha Estrela PT",
+                comment: "Pensa numa camiseta top! O tecido de algodão é extremamente macio e confortável. Chegou super rápido aqui em SP. Comprei 3 unidades para mim e para a minha família!",
+                verified: true
+            },
+            {
+                id: 102,
+                name: "Mariana Alencar",
+                location: "Belo Horizonte - MG",
+                rating: 5,
+                date: "há 4 dias",
+                productName: "Camiseta Direitos & Democracia",
+                comment: "Vestiu perfeitamente! A cor vermelha é bem viva e a estampa não desbota na lavagem. Já usei nos atos e passeatas da cidade. Recomendo demais a Vermelho Popular!",
+                verified: true
+            },
+            {
+                id: 103,
+                name: "Robson F. Santos",
+                location: "Recife - PE",
+                rating: 5,
+                date: "há 1 semana",
+                productName: "Camiseta Frase: Resistência & Esperança",
+                comment: "Sensacional! Pelo preço promocional eu não esperava uma qualidade tão alta. Costura forte, algodão de verdade. Já tô selecionando as próximas para o próximo pedido.",
+                verified: true
+            },
+            {
+                id: 104,
+                name: "Fernanda L. G.",
+                location: "Porto Alegre - RS",
+                rating: 4,
+                date: "há 1 semana",
+                productName: "Camiseta Básica Vermelho Popular",
+                comment: "Gostei bastante do produto e do atendimento pelo WhatsApp. O tamanho G ficou exato no corpo. A entrega para o Sul demorou apenas 4 dias úteis.",
+                verified: true
+            },
+            {
+                id: 105,
+                name: "João Paulo M.",
+                location: "Salvador - BA",
+                rating: 5,
+                date: "há 2 semanas",
+                productName: "Camiseta Vermelha Estrela PT",
+                comment: "Espetacular! Loja de confiança total. A camiseta veio muito bem embalada e com um cheirinho ótimo de roupa nova. Orgulho demais em vestir!",
+                verified: true
+            },
+            {
+                id: 106,
+                name: "Aline Meireles",
+                location: "Brasília - DF",
+                rating: 5,
+                date: "há 2 semanas",
+                productName: "Camiseta Direitos & Democracia",
+                comment: "Entrega super veloz em Brasília. As medidas da tabela correspondem certinho ao tamanho real. Nota 10 pro atendimento e pra qualidade!",
+                verified: true
+            }
+        ];
+
+        let cart = [];
+        let orders = [];
+        let companyInfo = {
+            cnpj: "Campo editável no Painel",
+            email: "contato@vermelhopopular.com.br",
+            address: "Atendimento Online - Entrega em todo o Brasil"
+        };
+
+        // DOM Initialization
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCatalog();
+            renderReviews('ALL');
+            updateCartUI();
+            renderAdminProducts();
+            renderCompanyFooter();
+        });
+
+        // Navigation Helper
+        function navigateTo(section) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        // Render Product Catalog
+        function renderCatalog() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = products.map(prod => {
+                return `
+                    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                        <div class="relative bg-gray-50 flex items-center justify-center p-4 border-b border-gray-100 group-hover:bg-red-50/30 transition-colors">
+                            <span class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow">PROMOÇÃO</span>
+                            ${prod.imageSvg}
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <span class="text-[11px] text-gray-400 uppercase font-semibold">${prod.color}</span>
+                                <h3 class="font-bold text-gray-900 text-base leading-snug hover:text-brand-red transition-colors cursor-pointer" onclick="openProductDetail(${prod.id})">${prod.name}</h3>
+                            </div>
+                            
+                            <!-- Size Selector -->
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-600 mb-1">Tamanho:</label>
+                                <div class="grid grid-cols-4 gap-1.5" id="sizeSelector_${prod.id}">
+                                    ${['P', 'M', 'G', 'GG'].map(sz => {
+                                        const qty = prod.sizes[sz] || 0;
+                                        const disabled = qty <= 0;
+                                        return `
+                                            <button onclick="selectSize(${prod.id}, '${sz}')" 
+                                                id="sizeBtn_${prod.id}_${sz}"
+                                                class="size-btn-${prod.id} border border-gray-300 py-1 rounded text-xs font-bold transition-all ${disabled ? 'opacity-40 cursor-not-allowed bg-gray-100' : 'hover:border-brand-red hover:text-brand-red'}"
+                                                ${disabled ? 'disabled' : ''}>
+                                                ${sz}
+                                            </button>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-gray-100 flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block leading-none">Preço Promocional</span>
+                                    <span class="text-xl font-black text-brand-red">R$ ${prod.price.toFixed(2).replace('.', ',')}</span>
+                                </div>
+                                <div class="flex gap-1">
+                                    <button onclick="openProductDetail(${prod.id})" class="p-2.5 text-gray-500 hover:text-gray-900 bg-gray-100 rounded-xl transition-colors" title="Detalhes do Produto">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                    </button>
+                                    <button onclick="addToCartFromGrid(${prod.id})" class="bg-brand-red hover:bg-brand-darkred text-white p-2.5 px-3.5 rounded-xl text-xs font-extrabold transition-colors shadow">
+                                        <i class="fa-solid fa-cart-plus mr-1"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Reviews Section
+        function renderReviews(filterValue = 'ALL') {
+            const grid = document.getElementById('reviewsGrid');
+            
+            let filtered = reviews;
+            if (filterValue !== 'ALL') {
+                filtered = reviews.filter(r => r.rating === parseInt(filterValue));
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-8 text-gray-500 text-xs font-bold">Nenhuma avaliação encontrada para este filtro.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(rev => {
+                const starsHtml = Array.from({ length: 5 }, (_, i) => {
+                    return `<i class="fa-solid fa-star ${i < rev.rating ? 'text-amber-400' : 'text-gray-300'}"></i>`;
+                }).join('');
+
+                return `
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
+                                        ${rev.name}
+                                        ${rev.verified ? `<span class="text-green-600 text-xs" title="Comprador Verificado"><i class="fa-solid fa-circle-check"></i></span>` : ''}
+                                    </h4>
+                                    <span class="text-[11px] text-gray-400 font-semibold block">${rev.location} • ${rev.date}</span>
+                                </div>
+                                <div class="flex text-xs gap-0.5">
+                                    ${starsHtml}
+                                </div>
+                            </div>
+                            <span class="inline-block bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold">${rev.productName}</span>
+                            <p class="text-xs text-gray-700 leading-relaxed italic">"${rev.comment}"</p>
+                        </div>
+                        <div class="pt-3 border-t border-gray-100 text-[10px] text-gray-400 font-semibold flex items-center gap-1">
+                            <i class="fa-solid fa-shield text-green-500"></i> Compra Verificada e Entregue
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterReviews(val) {
+            document.querySelectorAll('.review-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-red', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+            });
+            event.target.classList.remove('bg-gray-100', 'text-gray-700');
+            event.target.classList.add('bg-brand-red', 'text-white');
+            
+            renderReviews(val);
+        }
+
+        function submitReview(e) {
+            e.preventDefault();
+            const name = document.getElementById('revName').value;
+            const city = document.getElementById('revCity').value;
+            const rating = parseInt(document.getElementById('revRating').value);
+            const comment = document.getElementById('revComment').value;
+
+            const newRev = {
+                id: Date.now(),
+                name: name,
+                location: city,
+                rating: rating,
+                date: "Hoje",
+                productName: "Camiseta Vermelho Popular",
+                comment: comment,
+                verified: true
+            };
+
+            reviews.unshift(newRev);
+            renderReviews('ALL');
+            closeModal('addReviewModal');
+            alert("Agradecemos por sua avaliação! Sua opinião é muito importante para nós.");
+        }
+
+        // Store active selected size per product grid card
+        const selectedSizes = {};
+
+        function selectSize(prodId, sz) {
+            selectedSizes[prodId] = sz;
+            document.querySelectorAll(`.size-btn-${prodId}`).forEach(btn => {
+                btn.classList.remove('bg-brand-red', 'text-white', 'border-brand-red');
+                btn.classList.add('border-gray-300');
+            });
+            const selectedBtn = document.getElementById(`sizeBtn_${prodId}_${sz}`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('bg-brand-red', 'text-white', 'border-brand-red');
+            }
+        }
+
+        function addToCartFromGrid(prodId) {
+            const size = selectedSizes[prodId];
+            if (!size) {
+                alert("Por favor, selecione um tamanho (P, M, G ou GG) antes de adicionar ao carrinho.");
+                return;
+            }
+            addToCart(prodId, size);
+        }
+
+        function addToCart(prodId, size) {
+            const product = products.find(p => p.id === prodId);
+            if (!product) return;
+
+            const existingIndex = cart.findIndex(item => item.id === prodId && item.size === size);
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    size: size,
+                    color: product.color,
+                    qty: 1
+                });
+            }
+
+            updateCartUI();
+            toggleCart(true); // Open cart drawer
+        }
+
+        // Modal Controls
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function openProductDetail(id) {
+            const prod = products.find(p => p.id === id);
+            if (!prod) return;
+
+            const content = document.getElementById('productModalContent');
+            content.innerHTML = `
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-xl flex items-center justify-center border border-gray-100">
+                        ${prod.imageSvg}
+                    </div>
+                    <div class="space-y-4">
+                        <span class="bg-brand-red text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">100% Algodão</span>
+                        <h3 class="text-xl font-black text-gray-900">${prod.name}</h3>
+                        <p class="text-2xl font-black text-brand-red">R$ ${prod.price.toFixed(2).replace('.', ',')}</p>
+                        
+                        <div class="text-xs text-gray-600 space-y-2 border-y border-gray-100 py-3">
+                            <p><strong>Descrição:</strong> ${prod.desc}</p>
+                            <p><strong>Cor:</strong> ${prod.color}</p>
+                            <p><strong>Instruções de Lavagem:</strong> ${prod.washing}</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-2">Escolha o Tamanho para Comprar:</label>
+                            <div class="flex gap-2">
+                                ${['P', 'M', 'G', 'GG'].map(sz => `
+                                    <button onclick="addToCart(${prod.id}, '${sz}'); closeModal('productDetailModal');" 
+                                        class="flex-1 py-2 border-2 border-brand-red text-brand-red hover:bg-brand-red hover:text-white rounded-lg text-xs font-bold transition-colors">
+                                        Comprar ${sz}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal('productDetailModal');
+        }
+
+        // Cart Drawer logic
+        function toggleCart(forceOpen = false) {
+            const drawer = document.getElementById('cartDrawer');
+            if (forceOpen) {
+                drawer.classList.remove('hidden');
+            } else {
+                drawer.classList.toggle('hidden');
+            }
+        }
+
+        function updateCartUI() {
+            const countBadge = document.getElementById('cartCountBadge');
+            const list = document.getElementById('cartItemsList');
+            const subtotalDisp = document.getElementById('cartSubtotalDisplay');
+            const totalDisp = document.getElementById('cartTotalDisplay');
+            const checkoutBtn = document.getElementById('checkoutButton');
+
+            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            countBadge.innerText = totalItems;
+
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-12 space-y-3">
+                        <i class="fa-solid fa-basket-shopping text-4xl text-gray-300"></i>
+                        <p class="text-sm font-semibold text-gray-500">Seu carrinho está vazio.</p>
+                        <button onclick="toggleCart(); scrollToSection('catalog')" class="text-xs font-bold text-brand-red hover:underline">Ver camisetas disponíveis</button>
+                    </div>
+                `;
+                subtotalDisp.innerText = "R$ 0,00";
+                totalDisp.innerText = "R$ 0,00";
+                checkoutBtn.disabled = true;
+                return;
+            }
+
+            checkoutBtn.disabled = false;
+            let subtotal = 0;
+
+            list.innerHTML = cart.map((item, index) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+                return `
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-xs text-gray-900">${item.name}</h4>
+                            <div class="flex items-center gap-2 text-[11px] text-gray-500 mt-0.5">
+                                <span>Tamanho: <strong class="text-gray-800">${item.size}</strong></span>
+                                <span>•</span>
+                                <span>R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateQty(${index}, -1)" class="w-6 h-6 bg-white border border-gray-300 rounded text-xs font-bold">-</button>
+                            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                            <button onclick="updateQty(${index}, 1)" class="w-6 h-6 bg-white border border-gray-300 rounded text-xs font-bold">+</button>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-xs p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalDisp.innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            totalDisp.innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+        }
+
+        function updateQty(index, change) {
+            if (cart[index]) {
+                cart[index].qty += change;
+                if (cart[index].qty <= 0) {
+                    cart.splice(index, 1);
+                }
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function calculateShipping() {
+            const cep = document.getElementById('cepInput').value.trim();
+            const res = document.getElementById('shippingResult');
+            if (cep.length >= 8) {
+                res.innerHTML = `<i class="fa-solid fa-check"></i> Frete Grátis confirmado para a sua região!`;
+                res.classList.remove('hidden');
+            } else {
+                alert("Por favor, digite um CEP válido.");
+            }
+        }
+
+        // Checkout Trigger
+        function openCheckoutModal() {
+            if (cart.length === 0) return;
+            toggleCart();
+
+            const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            document.getElementById('checkoutTotalDisplay').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            openModal('checkoutModal');
+        }
+
+        // Handle Order Submit
+        function submitOrder(e) {
+            e.preventDefault();
+            
+            const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const orderId = Math.floor(10000 + Math.random() * 90000);
+
+            const newOrder = {
+                id: orderId,
+                date: new Date().toLocaleString('pt-BR'),
+                customer: {
+                    name: document.getElementById('custName').value,
+                    email: document.getElementById('custEmail').value,
+                    phone: document.getElementById('custPhone').value
+                },
+                items: [...cart],
+                total: total,
+                status: "Aguardando Pagamento Real"
+            };
+
+            orders.push(newOrder);
+            renderAdminOrders();
+
+            // Clear Cart
+            cart = [];
+            updateCartUI();
+
+            closeModal('checkoutModal');
+            document.getElementById('orderIdDisplay').innerText = `#VP-${orderId}`;
+            openModal('orderSuccessModal');
+        }
+
+        // Admin Panel Switcher
+        function toggleAdminPanel() {
+            document.getElementById('adminPanelModal').classList.toggle('hidden');
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('border-b-2', 'border-brand-red', 'text-brand-red');
+                btn.classList.add('text-gray-500');
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            event.target.classList.add('border-b-2', 'border-brand-red', 'text-brand-red');
+            event.target.classList.remove('text-gray-500');
+        }
+
+        // Render Products in Admin Table
+        function renderAdminProducts() {
+            const table = document.getElementById('adminProductsTable');
+            table.innerHTML = products.map(prod => `
+                <tr>
+                    <td class="p-3 font-mono font-bold">#${prod.id}</td>
+                    <td class="p-3 font-semibold">${prod.name}</td>
+                    <td class="p-3">
+                        <div class="flex items-center gap-1">
+                            <span>R$</span>
+                            <input type="number" step="0.50" value="${prod.price}" onchange="updateProductPrice(${prod.id}, this.value)" class="w-20 p-1 border rounded font-bold text-brand-red">
+                        </div>
+                    </td>
+                    <td class="p-3">
+                        <div class="flex gap-2">
+                            ${Object.keys(prod.sizes).map(sz => `
+                                <div class="text-[10px]">
+                                    <span class="block font-bold">${sz}</span>
+                                    <input type="number" value="${prod.sizes[sz]}" onchange="updateProductStock(${prod.id}, '${sz}', this.value)" class="w-12 p-0.5 border rounded">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                    <td class="p-3 text-right">
+                        <button onclick="deleteProduct(${prod.id})" class="text-red-600 hover:text-red-800 text-xs font-bold">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateProductPrice(id, newPrice) {
+            const prod = products.find(p => p.id === id);
+            if (prod) {
+                prod.price = parseFloat(newPrice) || 0;
+                renderCatalog();
+                if (id === 1) {
+                    document.getElementById('heroPriceDisplay').innerText = prod.price.toFixed(2).replace('.', ',');
+                }
+            }
+        }
+
+        function updateProductStock(id, size, newQty) {
+            const prod = products.find(p => p.id === id);
+            if (prod) {
+                prod.sizes[size] = parseInt(newQty) || 0;
+                renderCatalog();
+            }
+        }
+
+        function deleteProduct(id) {
+            if (confirm("Deseja realmente remover esta camiseta do catálogo?")) {
+                products = products.filter(p => p.id !== id);
+                renderCatalog();
+                renderAdminProducts();
+            }
+        }
+
+        function addNewProductPrompt() {
+            const name = prompt("Nome da nova camiseta:");
+            if (!name) return;
+            const price = parseFloat(prompt("Preço de venda (R$):", "5.00")) || 5.00;
+
+            const newProd = {
+                id: products.length + 1,
+                name: name,
+                price: price,
+                color: "Vermelho",
+                sizes: { P: 10, M: 10, G: 10, GG: 10 },
+                imageSvg: `<svg class="w-full h-48 py-4 text-brand-red" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z" fill="#D32F2F" stroke="#9A0007" stroke-width="0.5"/></svg>`,
+                desc: "Camiseta temática confeccionada em algodão.",
+                washing: "Lavagem convencional."
+            };
+
+            products.push(newProd);
+            renderCatalog();
+            renderAdminProducts();
+        }
+
+        function renderAdminOrders() {
+            const container = document.getElementById('adminOrdersList');
+            if (orders.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 italic">Nenhum pedido registrado ainda.</p>`;
+                return;
+            }
+
+            container.innerHTML = orders.map(ord => `
+                <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 text-xs space-y-2">
+                    <div class="flex justify-between font-bold border-b pb-2">
+                        <span>Pedido #VP-${ord.id} - ${ord.date}</span>
+                        <span class="text-brand-red">${ord.status}</span>
+                    </div>
+                    <p><strong>Cliente:</strong> ${ord.customer.name} (${ord.customer.email} | ${ord.customer.phone})</p>
+                    <p><strong>Itens:</strong> ${ord.items.map(i => `${i.qty}x ${i.name} (Tam: ${i.size})`).join(', ')}</p>
+                    <p class="font-bold text-gray-900">Total: R$ ${ord.total.toFixed(2).replace('.', ',')}</p>
+                </div>
+            `).join('');
+        }
+
+        function saveAdminSettings() {
+            alert("Configurações salvas no painel local com sucesso!");
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            alert("Sua mensagem foi enviada com sucesso! Responderemos em breve.");
+            closeModal('contactModal');
+        }
+
+        function renderCompanyFooter() {
+            document.getElementById('companyContactFooter').innerHTML = `
+                <p>E-mail: ${companyInfo.email}</p>
+                <p>${companyInfo.address}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+```
